@@ -2,9 +2,8 @@
   const gameBoard = (() => {
     let field = ['', '', '', '', '', '', '', '', ''];
 
-    const setField = (i, val) => {
-      field[i] = val;
-      console.log(field);
+    const setField = (index, val) => {
+      field[index] = val;
     };
 
     const resetField = () => {
@@ -12,7 +11,6 @@
     };
 
     const getField = () => {
-      console.log(field);
       return field;
     };
 
@@ -33,14 +31,19 @@
   const displayController = (() => {
     const _square = document.querySelectorAll('.square');
 
+    _square.forEach((square) =>
+      square.addEventListener('click', (el) => {
+        gameController.playRound(parseInt(el.target.dataset.index));
+        updateGameBoard();
+      })
+    );
 
     const updateGameBoard = () => {
-      
-    };
-
-    return { updateGameBoard };
+      for (let i = 0; i < _square.length; i++) {
+        _square[i].textContent = gameBoard.getField(i);
+      }
+    }
   })();
 
-  displayController.updateGameBoard();
-
+  return {};
 })();
