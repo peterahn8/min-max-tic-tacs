@@ -178,5 +178,19 @@ html {
 }
 
 body {
-  background-color: var(--700);
+  background-color: var(--100);
+}
+
+#display {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  border: 5px solid #0f172a;
+  width: 600px;
+  height: 600px;
+}
+
+.square {
+  justify-self: center;
+  align-self: center;
 }
