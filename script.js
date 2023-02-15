@@ -11,11 +11,10 @@
     };
 
     const getField = (index) => {
-      console.log(field);
       return field[index];
     };
 
-    return { setField, resetField, getField };
+    return { field, setField, resetField, getField };
   })();
 
   const Player = (sign) => {
@@ -32,10 +31,13 @@
     const playerX = Player('X');
     const playerO = Player('O');
     let turn = 1;
+    let gameOver = false;
 
     const playRound = (index) => {
       gameBoard.setField(index, getCurrPlayerSign());
       console.log(`${getCurrPlayerSign()} made a move`);
+      checkForTie();
+      checkForWinner();
       turn++;
     };
 
@@ -45,8 +47,42 @@
       } else {
         return playerX.getSign();
       }
-    }
+    };
 
+    const checkForWinner = () => {
+      const winConditions = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+      ];
+
+      for (let c = 0; c < winConditions.length; c++) {
+        if (gameOver) {
+          return;
+        }
+        if (winConditions[c].every((val) => gameBoard.getField(val) === 'X')) {
+          console.log('X has won');
+          gameOver = true;
+        } else if (
+          winConditions[c].every((val) => gameBoard.getField(val) === 'O')
+        ) {
+          console.log('O has won');
+          gameOver = true;
+        }
+      }
+    };
+
+    const checkForTie = () => {
+      if (gameBoard.field.every((val) => val !== '')) {
+        gameOver = true;
+        console.log('tie')
+      } 
+    }
 
     return { playRound };
   })();
@@ -62,14 +98,10 @@
       })
     );
 
-
-
     const updateGameBoard = () => {
       for (let i = 0; i < _square.length; i++) {
         _square[i].textContent = gameBoard.getField(i);
       }
     };
   })();
-
-
 })();
