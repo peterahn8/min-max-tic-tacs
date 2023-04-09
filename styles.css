@@ -178,7 +178,11 @@ html {
 }
 
 body {
-  background-color: var(--100);
+  background-color: var(--300);
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 8fr 1fr 1fr;
+  padding: 1rem;
 }
 
 #display {
@@ -188,6 +192,8 @@ body {
   border: 5px solid #0f172a;
   width: 600px;
   height: 600px;
+  justify-self: center;
+  align-self: center;
 }
 
 .square {
@@ -195,4 +201,20 @@ body {
   align-self: center;
   width: 100%;
   height: 100%;
+  font-size: 1000%;
+}
+
+#result {
+  justify-self: center;
+  align-self: end;
+  font-size: larger;
+}
+
+#reset {
+  justify-self: center;
+  align-self: center;
+}
+
+#greeting {
+  font-family: Helvetica-Neue;
 }
