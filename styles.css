@@ -182,7 +182,7 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 8fr 1fr 1fr;
-  padding: 1rem;
+  max-height: 100vh;
 }
 
 #display {
@@ -194,6 +194,7 @@ body {
   height: 600px;
   justify-self: center;
   align-self: center;
+  margin-top: 1rem;
 }
 
 .square {
