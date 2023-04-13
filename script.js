@@ -1,5 +1,5 @@
 (function () {
-  const gameBoard = (() => {
+  const gamefield = (() => {
     const field = ['', '', '', '', '', '', '', '', ''];
 
     const setField = (index, val) => {
@@ -23,6 +23,7 @@
           emptyFields.push(i);
         }
       }
+      console.log('The empty indexes are: ' + emptyFields);
       return emptyFields;
     };
 
@@ -39,6 +40,37 @@
     return { getSign };
   };
 
+  const minimaxAI = (newBoard, player) => {
+    let availSpots = gamefield.getEmptyFields();
+
+    const winning = (field, player) => {
+      if (
+        (field[0] === player && field[1] === player && field[2] === player) ||
+        (field[3] === player && field[4] === player && field[5] === player) ||
+        (field[6] === player && field[7] === player && field[8] === player) ||
+        (field[0] === player && field[3] === player && field[6] === player) ||
+        (field[1] === player && field[4] === player && field[7] === player) ||
+        (field[2] === player && field[5] === player && field[8] === player) ||
+        (field[0] === player && field[4] === player && field[8] === player) ||
+        (field[2] === player && field[4] === player && field[6] === player)
+      ) {
+        console.log('WINNER');
+        return true;
+      } else {
+        console.log('NO WINNER YET');
+        return false;
+      }
+    };
+
+    if (winning(newBoard, gameController.playerX)) {
+      return { score: -10 };
+    } else if (winning(newBoard, gameController.playerO)) {
+      return { score: 10 };
+    } else if (availSpots.length === 0) {
+      return { score: 0 };
+    }
+  };
+
   const gameController = (() => {
     const playerX = Player('X');
     const playerO = Player('O');
@@ -46,16 +78,16 @@
     let gameOver = false;
 
     const playRound = (index, field) => {
-      gameBoard.setField(index, getCurrPlayerSign());
+      gamefield.setField(index, getCurrPlayerSign());
       console.log(`${getCurrPlayerSign()} made a move`);
       checkForTie();
       checkForWinner();
       turn++;
-      gameBoard.getEmptyFields();
+      minimaxAI();
     };
 
     const resetGame = () => {
-      gameBoard.resetField();
+      gamefield.resetField();
       turn = 1;
       gameOver = false;
     };
@@ -69,7 +101,7 @@
     };
 
     const checkForTie = () => {
-      if (gameBoard.field.every((val) => val !== '')) {
+      if (gamefield.field.every((val) => val !== '')) {
         gameOver = true;
         return true;
       }
@@ -89,12 +121,12 @@
       ];
 
       for (let c = 0; c < winConditions.length; c++) {
-        if (winConditions[c].every((val) => gameBoard.getField(val) === 'X')) {
+        if (winConditions[c].every((val) => gamefield.getField(val) === 'X')) {
           gameOver = true;
           return playerX.getSign();
         }
 
-        if (winConditions[c].every((val) => gameBoard.getField(val) === 'O')) {
+        if (winConditions[c].every((val) => gamefield.getField(val) === 'O')) {
           gameOver = true;
           return playerO.getSign();
         }
@@ -119,7 +151,7 @@
       square.addEventListener('click', () => {
         if (square.textContent !== '') return;
         gameController.playRound(square.id);
-        updateGameBoard();
+        updateGamefield();
         updateResult();
       })
     );
@@ -127,14 +159,14 @@
     resetButton.addEventListener('click', () => {
       gameController.resetGame();
 
-      updateGameBoard();
+      updateGamefield();
       updateResult();
-      console.log(gameBoard.field);
+      console.log(gamefield.field);
     });
 
-    const updateGameBoard = () => {
+    const updateGamefield = () => {
       for (let i = 0; i < _square.length; i++) {
-        _square[i].textContent = gameBoard.getField(i);
+        _square[i].textContent = gamefield.getField(i);
       }
     };
 
