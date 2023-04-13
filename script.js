@@ -1,6 +1,6 @@
 (function () {
   const gameBoard = (() => {
-    let field = ['', '', '', '', '', '', '', '', ''];
+    const field = ['', '', '', '', '', '', '', '', ''];
 
     const setField = (index, val) => {
       field[index] = val;
@@ -16,7 +16,17 @@
       return field[index];
     };
 
-    return { field, setField, resetField, getField };
+    const getEmptyFields = (field) => {
+      const emptyFields = [];
+      for (let i = 0; i < field.length; i++) {
+        if (field[i] === '') {
+          emptyFields.push(field[i]);
+        }
+      }
+      return emptyFields;
+    };
+
+    return { field, setField, resetField, getField, getEmptyFields };
   })();
 
   const Player = (sign) => {
