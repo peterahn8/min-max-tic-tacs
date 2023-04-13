@@ -16,11 +16,11 @@
       return field[index];
     };
 
-    const getEmptyFields = (field) => {
+    const getEmptyFields = () => {
       const emptyFields = [];
       for (let i = 0; i < field.length; i++) {
         if (field[i] === '') {
-          emptyFields.push(field[i]);
+          emptyFields.push(i);
         }
       }
       return emptyFields;
@@ -45,12 +45,13 @@
     let turn = 1;
     let gameOver = false;
 
-    const playRound = (index) => {
+    const playRound = (index, field) => {
       gameBoard.setField(index, getCurrPlayerSign());
       console.log(`${getCurrPlayerSign()} made a move`);
       checkForTie();
       checkForWinner();
       turn++;
+      gameBoard.getEmptyFields();
     };
 
     const resetGame = () => {
