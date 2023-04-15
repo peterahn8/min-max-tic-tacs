@@ -1,14 +1,17 @@
 (function () {
   const gamefield = (() => {
-    const field = ['', '', '', '', '', '', '', '', ''];
+    const field = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
     const setField = (index, val) => {
+      if (val === 'O') {
+        gameController.minimaxLogic(field, 'O');
+      }
       field[index] = val;
     };
 
     const resetField = () => {
       for (let i = 0; i < field.length; i++) {
-        field[i] = '';
+        field[i] = i;
       }
     };
 
@@ -23,7 +26,7 @@
     const getEmptyFieldIndexes = () => {
       const emptyFields = [];
       for (let i = 0; i < field.length; i++) {
-        if (field[i] === '') {
+        if (field[i] === i) {
           emptyFields.push(i);
         }
       }
@@ -53,8 +56,8 @@
     const playRound = (index, field) => {
       gamefield.setField(index, getCurrPlayerSign());
       console.log(`${getCurrPlayerSign()} made a move`);
-      checkForTie();
-      checkForWinner();
+      // checkForTie();
+      // checkForWinner();
       turn++;
       minimaxLogic();
     };
@@ -73,42 +76,42 @@
       }
     };
 
-    const checkForTie = () => {
-      if (gamefield.field.every((val) => val !== '')) {
-        gameOver = true;
-        return true;
-      }
-      return false;
-    };
+    // const checkForTie = () => {
+    //   if (gamefield.field.every((val) => val !== '')) {
+    //     gameOver = true;
+    //     return true;
+    //   }
+    //   return false;
+    // };
 
-    const checkForWinner = () => {
-      const winConditions = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6],
-      ];
+    // const checkForWinner = () => {
+    //   const winConditions = [
+    //     [0, 1, 2],
+    //     [3, 4, 5],
+    //     [6, 7, 8],
+    //     [0, 3, 6],
+    //     [1, 4, 7],
+    //     [2, 5, 8],
+    //     [0, 4, 8],
+    //     [2, 4, 6],
+    //   ];
 
-      for (let c = 0; c < winConditions.length; c++) {
-        if (winConditions[c].every((val) => gamefield.getField(val) === 'X')) {
-          gameOver = true;
-          return playerX.getSign();
-        }
+    //   for (let c = 0; c < winConditions.length; c++) {
+    //     if (winConditions[c].every((val) => gamefield.getField(val) === 'X')) {
+    //       gameOver = true;
+    //       return playerX.getSign();
+    //     }
 
-        if (winConditions[c].every((val) => gamefield.getField(val) === 'O')) {
-          gameOver = true;
-          return playerO.getSign();
-        }
-      }
-    };
+    //     if (winConditions[c].every((val) => gamefield.getField(val) === 'O')) {
+    //       gameOver = true;
+    //       return playerO.getSign();
+    //     }
+      // }
+    // };
 
-    const minimaxLogic = (player) => {
-      const field = gamefield.getFieldArray();
+    const minimaxLogic = (newField, player) => {
       const availSpots = gamefield.getEmptyFieldIndexes();
+      const field = gamefield.field;
   
       const winning = (player) => {
         if (
@@ -121,10 +124,10 @@
           (field[0] === player && field[4] === player && field[8] === player) ||
           (field[2] === player && field[4] === player && field[6] === player)
         ) {
-          console.log('WINNER');
+          console.log('WINNER' + field);
           return true;
         } else {
-          console.log('NO WINNER YET');
+          console.log('NO WINNER YET' + field);
           return false;
         }
       };
@@ -136,14 +139,72 @@
       } else if (availSpots.length === 0) {
         return { score: 0 };
       }
+      
+      // an array to collect all the objects
+      const moves = [];
+
+      // loop through available spots
+      for (let i = 0; i < availSpots.length; i++) {
+        // create an object for each and store the index of that spot
+        const move = {};
+        move.index = newField[availSpots[i]];
+  
+        // set the empty spot to the current player
+        if (gameController.getCurrPlayerSign === 'X') {
+          newField[availSpots[i]] = 'X';
+        } else if (gameController.getCurrPlayerSign === 'O') {
+          newField[availSpots[i]] = 'O';
+        }
+  
+        // collect the score resulted from calling minimax
+        // on the opponent of the current player
+        if (player === 'O') {
+          const result = minimaxLogic(newField, 'X');
+          move.score = result.score;
+        } else {
+          const result = minimaxLogic(newField, 'O');
+          move.score = result.score;
+        }
+  
+        // reset the spot to empty
+        newField[availSpots[i]] = move.index;
+  
+        // push the object to the array
+        moves.push(move);
+      }
+  
+      // if it is the computer's turn loop over the moves and choose the move with the highest score
+      let bestMove;
+      if (player === 'O') {
+        let bestScore = -10000;
+        for (let i = 0; i < moves.length; i++) {
+          if (moves[i].score > bestScore) {
+            bestScore = moves[i].score;
+            bestMove = i;
+          }
+        }
+      } else {
+        // else loop over the moves and choose the move with the lowest score
+        let bestScore = 10000;
+        for (let i = 0; i < moves.length; i++) {
+          if (moves[i].score < bestScore) {
+            bestScore = moves[i].score;
+            bestMove = i;
+          }
+        }
+      }
+  
+      // return the chosen move (object) from the moves array
+      return moves[bestMove];
     };
 
     return {
       playRound,
       resetGame,
       getCurrPlayerSign,
-      checkForWinner,
-      checkForTie,
+      // checkForWinner,
+      // checkForTie,
+      minimaxLogic
     };
   })();
 
@@ -154,7 +215,9 @@
 
     _square.forEach((square) =>
       square.addEventListener('click', () => {
-        if (square.textContent !== '') return;
+        if (gamefield.field[parseInt(square.id)] !== /[0-8]/)
+        console.log(parseInt(square.id))
+        return;
         gameController.playRound(square.id);
         updateGamefield();
         updateResult();
@@ -175,26 +238,26 @@
       }
     };
 
-    const updateResult = () => {
-      result.textContent = `Player ${gameController.getCurrPlayerSign()}, make your move!`;
+    // const updateResult = () => {
+    //   result.textContent = `Player ${gameController.getCurrPlayerSign()}, make your move!`;
 
-      if (gameController.checkForTie() === true) {
-        result.textContent = `The game was a tie!`;
-      }
+    //   if (gameController.checkForTie() === true) {
+    //     result.textContent = `The game was a tie!`;
+    //   }
 
-      if (gameController.checkForWinner() === 'X') {
-        console.log('X won');
-        result.textContent = `X won!`;
-      }
+    //   if (gameController.checkForWinner() === 'X') {
+    //     console.log('X won');
+    //     result.textContent = `X won!`;
+    //   }
 
-      if (gameController.checkForWinner() === 'O') {
-        console.log('O won');
-        result.textContent = `O won!`;
-      }
-    };
+    //   if (gameController.checkForWinner() === 'O') {
+    //     console.log('O won');
+    //     result.textContent = `O won!`;
+    //   }
+    // };
 
-    updateResult();
+    // updateResult();
 
-    return { updateResult };
+    // return { updateResult };
   })();
 })();
