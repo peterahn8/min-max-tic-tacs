@@ -16,7 +16,11 @@
       return field[index];
     };
 
-    const getEmptyFields = () => {
+    const getFieldArray = () => {
+      return field;
+    }
+
+    const getEmptyFieldIndexes = () => {
       const emptyFields = [];
       for (let i = 0; i < field.length; i++) {
         if (field[i] === '') {
@@ -27,7 +31,7 @@
       return emptyFields;
     };
 
-    return { field, setField, resetField, getField, getEmptyFields };
+    return { field, setField, resetField, getField, getEmptyFieldIndexes };
   })();
 
   const Player = (sign) => {
@@ -41,9 +45,10 @@
   };
 
   const minimaxAI = (newBoard, player) => {
-    let availSpots = gamefield.getEmptyFields();
+    const availSpots = gamefield.getEmptyFieldIndexes();
 
-    const winning = (field, player) => {
+    const winning = (player) => {
+      const field = gamefield.getFieldArray();
       if (
         (field[0] === player && field[1] === player && field[2] === player) ||
         (field[3] === player && field[4] === player && field[5] === player) ||
