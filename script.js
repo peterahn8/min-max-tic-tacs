@@ -60,7 +60,7 @@
       } else if (getCurrPlayer() === human) {
         gameField.field[val] = human;
         turn++;
-        console.log(`Waiting for human.` + ` ` + `Current turn: ` + turn);
+        console.log(`Human has decided.` + ` ` + `Current turn: ` + turn);
       }
     };
 
@@ -203,6 +203,9 @@
           return;
         }
         gameController.playRound(square.id);
+        if (gameController.getCurrPlayer() === minimax) {
+          gameController.playRound(square.id);
+        }
         updateDisplay();
         updateResult();
       })
