@@ -44,38 +44,6 @@
     return { getSign };
   };
 
-  const minimaxAI = (newBoard, player) => {
-    const availSpots = gamefield.getEmptyFieldIndexes();
-
-    const winning = (player) => {
-      const field = gamefield.getFieldArray();
-      if (
-        (field[0] === player && field[1] === player && field[2] === player) ||
-        (field[3] === player && field[4] === player && field[5] === player) ||
-        (field[6] === player && field[7] === player && field[8] === player) ||
-        (field[0] === player && field[3] === player && field[6] === player) ||
-        (field[1] === player && field[4] === player && field[7] === player) ||
-        (field[2] === player && field[5] === player && field[8] === player) ||
-        (field[0] === player && field[4] === player && field[8] === player) ||
-        (field[2] === player && field[4] === player && field[6] === player)
-      ) {
-        console.log('WINNER');
-        return true;
-      } else {
-        console.log('NO WINNER YET');
-        return false;
-      }
-    };
-
-    if (winning(newBoard, gameController.playerX)) {
-      return { score: -10 };
-    } else if (winning(newBoard, gameController.playerO)) {
-      return { score: 10 };
-    } else if (availSpots.length === 0) {
-      return { score: 0 };
-    }
-  };
-
   const gameController = (() => {
     const playerX = Player('X');
     const playerO = Player('O');
@@ -88,7 +56,7 @@
       checkForTie();
       checkForWinner();
       turn++;
-      minimaxAI();
+      minimaxLogic();
     };
 
     const resetGame = () => {
@@ -135,6 +103,38 @@
           gameOver = true;
           return playerO.getSign();
         }
+      }
+    };
+
+    const minimaxLogic = (player) => {
+      const field = gamefield.getFieldArray();
+      const availSpots = gamefield.getEmptyFieldIndexes();
+  
+      const winning = (player) => {
+        if (
+          (field[0] === player && field[1] === player && field[2] === player) ||
+          (field[3] === player && field[4] === player && field[5] === player) ||
+          (field[6] === player && field[7] === player && field[8] === player) ||
+          (field[0] === player && field[3] === player && field[6] === player) ||
+          (field[1] === player && field[4] === player && field[7] === player) ||
+          (field[2] === player && field[5] === player && field[8] === player) ||
+          (field[0] === player && field[4] === player && field[8] === player) ||
+          (field[2] === player && field[4] === player && field[6] === player)
+        ) {
+          console.log('WINNER');
+          return true;
+        } else {
+          console.log('NO WINNER YET');
+          return false;
+        }
+      };
+  
+      if (winning('X')) {
+        return { score: -10 };
+      } else if (winning('O')) {
+        return { score: 10 };
+      } else if (availSpots.length === 0) {
+        return { score: 0 };
       }
     };
 
