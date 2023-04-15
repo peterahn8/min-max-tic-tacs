@@ -1,13 +1,19 @@
 (function () {
-  const gamefield = (() => {
+  const human = 'X';
+  const minimax = 'O';
+
+  const gameField = (() => {
     const field = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
-    const setField = (index, val) => {
-      if (val === 'O') {
-        gameController.minimaxLogic(field, 'O');
-      }
-      field[index] = val;
-    };
+    // const setField = (index, player) => {
+    //   if (player === minimax) {
+    //     gameController.minimaxLogic(field, minimax);
+    //     console.log(field)
+    //   } else {
+    //     field[index] = player;
+    //     console.log(field)
+    //   }
+    // };
 
     const resetField = () => {
       for (let i = 0; i < field.length; i++) {
@@ -21,7 +27,7 @@
 
     const getFieldArray = () => {
       return field;
-    }
+    };
 
     const getEmptyFieldIndexes = () => {
       const emptyFields = [];
@@ -30,54 +36,51 @@
           emptyFields.push(i);
         }
       }
-      console.log('The empty indexes are: ' + emptyFields);
+      // console.log('The empty indexes are: ' + emptyFields);
       return emptyFields;
     };
 
-    return { field, setField, resetField, getField, getEmptyFieldIndexes };
+    return { field, resetField, getField, getEmptyFieldIndexes };
   })();
 
-  const Player = (sign) => {
-    this.sign = sign;
-
-    const getSign = () => {
-      return sign;
-    };
-
-    return { getSign };
-  };
-
   const gameController = (() => {
-    const playerX = Player('X');
-    const playerO = Player('O');
     let turn = 1;
+    console.log(`The current turn is: ` + turn);
     let gameOver = false;
 
-    const playRound = (index, field) => {
-      gamefield.setField(index, getCurrPlayerSign());
-      console.log(`${getCurrPlayerSign()} made a move`);
+    const playRound = (player, val) => {
+      // gameField.setField(index, getCurrPlayerSign());
+      // console.log(`${getCurrPlayerSign()} made a move`);
       // checkForTie();
       // checkForWinner();
-      turn++;
-      minimaxLogic();
+      if (player === minimax) {
+        const index = minimaxLogic(gameField.field, minimax).index;
+        gameField.field[index] = minimax;
+        turn++;
+        console.log(`It is minimax's turn.` + ` ` +`Current turn: ` + turn);
+      } else if (player === human) {
+        gameField.field[val] = human;
+        turn++;
+        console.log(`It is the human's turn.` + ` ` + `Current turn: ` + turn);
+      }
     };
 
     const resetGame = () => {
-      gamefield.resetField();
+      gameField.resetField();
       turn = 1;
       gameOver = false;
     };
 
-    const getCurrPlayerSign = () => {
+    const getCurrPlayer = () => {
       if (turn % 2 === 0) {
-        return playerO.getSign();
+        return minimax;
       } else {
-        return playerX.getSign();
+        return human;
       }
     };
 
     // const checkForTie = () => {
-    //   if (gamefield.field.every((val) => val !== '')) {
+    //   if (gameField.field.every((player) => player !== '')) {
     //     gameOver = true;
     //     return true;
     //   }
@@ -97,49 +100,29 @@
     //   ];
 
     //   for (let c = 0; c < winConditions.length; c++) {
-    //     if (winConditions[c].every((val) => gamefield.getField(val) === 'X')) {
+    //     if (winConditions[c].every((player) => gameField.getField(player) === human)) {
     //       gameOver = true;
     //       return playerX.getSign();
     //     }
 
-    //     if (winConditions[c].every((val) => gamefield.getField(val) === 'O')) {
+    //     if (winConditions[c].every((player) => gameField.getField(player) === minimax)) {
     //       gameOver = true;
     //       return playerO.getSign();
     //     }
-      // }
+    // }
     // };
 
     const minimaxLogic = (newField, player) => {
-      const availSpots = gamefield.getEmptyFieldIndexes();
-      const field = gamefield.field;
-  
-      const winning = (player) => {
-        if (
-          (field[0] === player && field[1] === player && field[2] === player) ||
-          (field[3] === player && field[4] === player && field[5] === player) ||
-          (field[6] === player && field[7] === player && field[8] === player) ||
-          (field[0] === player && field[3] === player && field[6] === player) ||
-          (field[1] === player && field[4] === player && field[7] === player) ||
-          (field[2] === player && field[5] === player && field[8] === player) ||
-          (field[0] === player && field[4] === player && field[8] === player) ||
-          (field[2] === player && field[4] === player && field[6] === player)
-        ) {
-          console.log('WINNER' + field);
-          return true;
-        } else {
-          console.log('NO WINNER YET' + field);
-          return false;
-        }
-      };
-  
-      if (winning('X')) {
+      const availSpots = gameField.getEmptyFieldIndexes();
+
+      if (winning(human)) {
         return { score: -10 };
-      } else if (winning('O')) {
+      } else if (winning(minimax)) {
         return { score: 10 };
       } else if (availSpots.length === 0) {
         return { score: 0 };
       }
-      
+
       // an array to collect all the objects
       const moves = [];
 
@@ -148,34 +131,34 @@
         // create an object for each and store the index of that spot
         const move = {};
         move.index = newField[availSpots[i]];
-  
+
         // set the empty spot to the current player
-        if (gameController.getCurrPlayerSign === 'X') {
-          newField[availSpots[i]] = 'X';
-        } else if (gameController.getCurrPlayerSign === 'O') {
-          newField[availSpots[i]] = 'O';
+        if (player === human) {
+          newField[availSpots[i]] = human;
+        } else if (player === minimax) {
+          newField[availSpots[i]] = minimax;
         }
-  
+
         // collect the score resulted from calling minimax
         // on the opponent of the current player
-        if (player === 'O') {
-          const result = minimaxLogic(newField, 'X');
+        if (player === minimax) {
+          const result = minimaxLogic(newField, human);
           move.score = result.score;
         } else {
-          const result = minimaxLogic(newField, 'O');
+          const result = minimaxLogic(newField, minimax);
           move.score = result.score;
         }
-  
+
         // reset the spot to empty
         newField[availSpots[i]] = move.index;
-  
+
         // push the object to the array
         moves.push(move);
       }
-  
+
       // if it is the computer's turn loop over the moves and choose the move with the highest score
       let bestMove;
-      if (player === 'O') {
+      if (player === minimax) {
         let bestScore = -10000;
         for (let i = 0; i < moves.length; i++) {
           if (moves[i].score > bestScore) {
@@ -193,7 +176,7 @@
           }
         }
       }
-  
+
       // return the chosen move (object) from the moves array
       return moves[bestMove];
     };
@@ -201,10 +184,10 @@
     return {
       playRound,
       resetGame,
-      getCurrPlayerSign,
+      getCurrPlayer,
       // checkForWinner,
       // checkForTie,
-      minimaxLogic
+      minimaxLogic,
     };
   })();
 
@@ -215,49 +198,76 @@
 
     _square.forEach((square) =>
       square.addEventListener('click', () => {
-        if (gamefield.field[parseInt(square.id)] !== /[0-8]/)
-        console.log(parseInt(square.id))
-        return;
-        gameController.playRound(square.id);
-        updateGamefield();
+        if (gameField.field[parseInt(square.id)] === /[0-8]/) {
+          // console.log('Clicked on empty index: ' + parseInt(square.id));
+          return;
+        }
+        gameController.playRound(gameController.getCurrPlayer(), square.id);
+        updateDisplay();
         updateResult();
       })
     );
 
     resetButton.addEventListener('click', () => {
       gameController.resetGame();
-
-      updateGamefield();
+      updateDisplay();
       updateResult();
-      console.log(gamefield.field);
+      // console.log(gameField.field);
     });
 
-    const updateGamefield = () => {
+    const updateDisplay = () => {
       for (let i = 0; i < _square.length; i++) {
-        _square[i].textContent = gamefield.getField(i);
+        if (gameField.getField(i) === /[0-8]/) {
+          return;
+        } else if (
+          gameField.getField(i) === human ||
+          gameField.getField(i) === minimax
+        ) {
+          _square[i].textContent = gameField.getField(i);
+        }
       }
     };
 
-    // const updateResult = () => {
-    //   result.textContent = `Player ${gameController.getCurrPlayerSign()}, make your move!`;
+    const updateResult = () => {
+      result.textContent = `Player ${gameController.getCurrPlayer()}, make your move!`;
 
-    //   if (gameController.checkForTie() === true) {
-    //     result.textContent = `The game was a tie!`;
-    //   }
+      // if (gameController.checkForTie() === true) {
+      //   result.textContent = `The game was a tie!`;
+      // }
 
-    //   if (gameController.checkForWinner() === 'X') {
-    //     console.log('X won');
-    //     result.textContent = `X won!`;
-    //   }
+      // if (gameController.checkForWinner() === human) {
+      //   console.log('X won');
+      //   result.textContent = `X won!`;
+      // }
 
-    //   if (gameController.checkForWinner() === 'O') {
-    //     console.log('O won');
-    //     result.textContent = `O won!`;
-    //   }
-    // };
+      // if (gameController.checkForWinner() === minimax) {
+      //   console.log('O won');
+      //   result.textContent = `O won!`;
+      // }
+    };
 
-    // updateResult();
+    updateResult();
 
-    // return { updateResult };
+    return { updateResult };
   })();
+
+  const winning = (player) => {
+    const field = gameField.field;
+    if (
+      (field[0] === player && field[1] === player && field[2] === player) ||
+      (field[3] === player && field[4] === player && field[5] === player) ||
+      (field[6] === player && field[7] === player && field[8] === player) ||
+      (field[0] === player && field[3] === player && field[6] === player) ||
+      (field[1] === player && field[4] === player && field[7] === player) ||
+      (field[2] === player && field[5] === player && field[8] === player) ||
+      (field[0] === player && field[4] === player && field[8] === player) ||
+      (field[2] === player && field[4] === player && field[6] === player)
+    ) {
+      // console.log('WINNER' + field);
+      return true;
+    } else {
+      // console.log('NO WINNER YET' + field);
+      return false;
+    }
+  };
 })();
