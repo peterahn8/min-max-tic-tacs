@@ -47,8 +47,6 @@
 
     const resetGame = () => {
       gameField.resetField();
-      displayController.updateResult();
-      displayController.updateDisplay();
       turn = 1;
       gameOver = false;
     };
@@ -56,9 +54,8 @@
     const getCurrPlayer = () => {
       if (turn % 2 === 0) {
         return minimax;
-      } else {
-        return human;
       }
+        return human;
     };
 
     const checkForTie = () => {
@@ -167,8 +164,8 @@
 
     _square.forEach((square) =>
       square.addEventListener('click', () => {
-        if (gameField.field[parseInt(square.id)] === /[0-8]/) {
-          return;
+        if (gameField.field[parseInt(square.id)] === human || gameField.field[parseInt(square.id)] === minimax) {
+          return false;
         }
         gameController.playRound(square.id);
         if (gameController.getCurrPlayer() === minimax) {
@@ -181,25 +178,26 @@
 
     resetButton.addEventListener('click', () => {
       gameController.resetGame();
-      updateDisplay();
       updateResult();
+      updateDisplay();
+      console.log(gameField.field)
     });
 
     const updateDisplay = () => {
       for (let i = 0; i < _square.length; i++) {
-        if (gameField.getField(i) === /[0-8]/) {
-          return;
-        } else if (
+        if (
           gameField.getField(i) === human ||
           gameField.getField(i) === minimax
         ) {
           _square[i].textContent = gameField.getField(i);
+        } else {
+          _square[i].textContent = '';
         }
       }
     };
 
     const updateResult = () => {
-      result.textContent = `Player ${gameController.getCurrPlayer()}, make your move!`;
+      result.textContent = `Make your move!`;
 
       if (gameController.checkForTie() === true) {
         result.textContent = `The game was a tie!`;
@@ -211,7 +209,7 @@
       }
     };
 
-    return { updateResult };
+    return { updateResult, updateDisplay };
   })();
 
   displayController.updateResult();
