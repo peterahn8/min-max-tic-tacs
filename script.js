@@ -2,6 +2,7 @@
   const human = 'X';
   const minimax = 'O';
 
+  // The `gameField` module manages the game board.
   const gameField = (() => {
     const field = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
@@ -28,6 +29,7 @@
     return { field, resetField, getField, getEmptyFieldIndexes };
   })();
 
+  // The `gameController` module manages the game logic.
   const gameController = (() => {
     let turn = 1;
     let gameOver = false;
@@ -55,7 +57,7 @@
       if (turn % 2 === 0) {
         return minimax;
       }
-        return human;
+      return human;
     };
 
     const checkForTie = () => {
@@ -157,6 +159,7 @@
     };
   })();
 
+  // The `displayController` module displays the game board and handles user input.
   const displayController = (() => {
     const _square = document.querySelectorAll('.square');
     const result = document.querySelector('#result');
@@ -164,7 +167,13 @@
 
     _square.forEach((square) =>
       square.addEventListener('click', () => {
-        if (gameField.field[parseInt(square.id)] === human || gameField.field[parseInt(square.id)] === minimax) {
+        if (
+          gameField.field[square.id] === human ||
+          gameField.field[square.id] === minimax ||
+          gameController.checkForTie() ||
+          gameController.checkWinStates(human) ||
+          gameController.checkWinStates(minimax)
+        ) {
           return false;
         }
         gameController.playRound(square.id);
@@ -180,7 +189,7 @@
       gameController.resetGame();
       updateResult();
       updateDisplay();
-      console.log(gameField.field)
+      console.log(gameField.field);
     });
 
     const updateDisplay = () => {
@@ -202,7 +211,6 @@
       if (gameController.checkForTie() === true) {
         result.textContent = `The game was a tie!`;
       } else if (gameController.checkWinStates(minimax)) {
-        console.log('Winner!');
         result.textContent = `Minimax wins!`;
       } else if (gameController.checkWinStates(human)) {
         result.textContent = `You won! Wait, that's impossible.`;
