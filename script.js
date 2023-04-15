@@ -83,23 +83,18 @@
       } else if (availSpots.length === 0) {
         return { score: 0 };
       }
-      
-      // an array to collect all the objects
+
       const moves = [];
 
-      // loop through available spots
       for (let i = 0; i < availSpots.length; i++) {
-        // create an object for each and store the index of that spot
         const move = {};
         move.index = newField[availSpots[i]];
-        // set the empty spot to the current player
+
         if (player === human) {
           newField[availSpots[i]] = human;
         } else if (player === minimax) {
           newField[availSpots[i]] = minimax;
         }
-        // collect the score resulted from calling minimax
-        // on the opponent of the current player
         if (player === minimax) {
           const result = minimaxLogic(newField, human);
           move.score = result.score;
@@ -107,14 +102,13 @@
           const result = minimaxLogic(newField, minimax);
           move.score = result.score;
         }
-        // reset the spot to empty
+
         newField[availSpots[i]] = move.index;
-        // push the object to the array
         moves.push(move);
       }
 
-      // if it is the computer's turn loop over the moves and choose the move with the highest score
       let bestMove;
+
       if (player === minimax) {
         let bestScore = -10000;
         for (let i = 0; i < moves.length; i++) {
@@ -124,7 +118,6 @@
           }
         }
       } else {
-        // else loop over the moves and choose the move with the lowest score
         let bestScore = 10000;
         for (let i = 0; i < moves.length; i++) {
           if (moves[i].score < bestScore) {
@@ -134,12 +127,12 @@
         }
       }
 
-      // return the chosen move (object) from the moves array
       return moves[bestMove];
     };
 
     const checkWinStates = (player) => {
       const field = gameField.field;
+
       if (
         (field[0] === player && field[1] === player && field[2] === player) ||
         (field[3] === player && field[4] === player && field[5] === player) ||
@@ -211,9 +204,7 @@
 
       if (gameController.checkForTie() === true) {
         result.textContent = `The game was a tie!`;
-      }
-
-      if (gameController.checkWinStates(minimax)) {
+      } else if (gameController.checkWinStates(minimax)) {
         console.log('Winner!');
         result.textContent = `Minimax wins!`;
       } else if (gameController.checkWinStates(human)) {
@@ -221,10 +212,8 @@
       }
     };
 
-    updateResult();
-
     return { updateResult };
   })();
 
-  console.log(`Waiting for human. Current turn is: ` + gameController.turn);
+  displayController.updateResult();
 })();
