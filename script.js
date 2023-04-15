@@ -70,7 +70,6 @@
         gameOver = true;
         return true;
       }
-      return false;
     };
 
     const minimaxLogic = (newField, player) => {
