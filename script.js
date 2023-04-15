@@ -45,23 +45,22 @@
 
   const gameController = (() => {
     let turn = 1;
-    console.log(`The current turn is: ` + turn);
     let gameOver = false;
 
-    const playRound = (player, val) => {
+    const playRound = (val) => {
       // gameField.setField(index, getCurrPlayerSign());
       // console.log(`${getCurrPlayerSign()} made a move`);
       // checkForTie();
       // checkForWinner();
-      if (player === minimax) {
+      if (getCurrPlayer() === minimax) {
+        turn++;
         const index = minimaxLogic(gameField.field, minimax).index;
         gameField.field[index] = minimax;
-        turn++;
-        console.log(`It is minimax's turn.` + ` ` +`Current turn: ` + turn);
-      } else if (player === human) {
+        console.log(`Minimax has decided.` + ` ` + `Current turn: ` + turn);
+      } else if (getCurrPlayer() === human) {
         gameField.field[val] = human;
         turn++;
-        console.log(`It is the human's turn.` + ` ` + `Current turn: ` + turn);
+        console.log(`Waiting for human.` + ` ` + `Current turn: ` + turn);
       }
     };
 
@@ -188,6 +187,7 @@
       // checkForWinner,
       // checkForTie,
       minimaxLogic,
+      turn
     };
   })();
 
@@ -202,7 +202,7 @@
           // console.log('Clicked on empty index: ' + parseInt(square.id));
           return;
         }
-        gameController.playRound(gameController.getCurrPlayer(), square.id);
+        gameController.playRound(square.id);
         updateDisplay();
         updateResult();
       })
@@ -270,4 +270,5 @@
       return false;
     }
   };
+  console.log(`Waiting for human. Current turn is: ` + gameController.turn)
 })();
