@@ -74,7 +74,7 @@
 
     // Control the AI player
     const minimaxLogic = (newField, player) => {
-      // Only look at available squares to reduce time complexity
+      // Only look at available `field` indexes to reduce time complexity
       const availIndex = gameField.getEmptyFieldIndexes();
 
       if (checkWinStates(human)) {
