@@ -29,13 +29,13 @@ The game tree can be visualized like this:
 ![Game tree from GeeksforGeeks.com](https://media.geeksforgeeks.org/wp-content/uploads/TIC_TAC.jpg)
 > Image from GeeksforGeeks.com
 
-An expected loss is worth -10 points. An expected win is worth +10 points. An expected draw is worth 0 points. These are known as "terminal states". Terminal states are essentially Minimax's plan to steal your dopamine.
+An expected loss is worth -10 points. An expected win is worth +10 points. An expected draw is worth 0 points. These are known as "terminal states". Terminal states are essentially the AI's plan to steal your dopamine.
 
 When implemented correctly, it's impossible to win against Minimax. It will try to nullify every single one of your moves. If you leave an opening, it won't hesitate to win against you.
 
-Hold on... We humans use a similar strategy! First, we prioritize preventing losses. If the opponent leaves an opening, we try to win. As a last resort, we can always force a draw. By defintion, we can *always* prevent Minimax from winning.
+Don't worry. We humans tend to use a similar strategy! First, we focus on preventing immediate losses. If the opponent leaves an opening, we try to win. If all else fails, we can try to force a draw. We can prevent Minimax from *winning*. That way, neither of you get to enjoy the game.
 
-With that said, have fun! :skull:
+With that said, good luck! :skull:
 
 ### References
 
