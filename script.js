@@ -2,7 +2,7 @@
   const human = 'X';
   const minimax = 'O';
 
-  // The `gameField` module manages the game board.
+  // Manage the game board
   const gameField = (() => {
     const field = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
@@ -12,7 +12,7 @@
       }
     };
 
-    const getField = (index) => {
+    const getFieldIndex = (index) => {
       return field[index];
     };
 
@@ -26,24 +26,25 @@
       return emptyFields;
     };
 
-    return { field, resetField, getField, getEmptyFieldIndexes };
+    return { field, resetField, getFieldIndex, getEmptyFieldIndexes };
   })();
 
-  // The `gameController` module manages the game logic.
+  // Manage the game logic
   const gameController = (() => {
     let turn = 1;
     let gameOver = false;
 
     const playRound = (val) => {
+      console.log(gameOver);
       if (getCurrPlayer() === minimax) {
         turn++;
         const index = minimaxLogic(gameField.field, minimax).index;
         gameField.field[index] = minimax;
-        console.log(`Minimax has decided.` + ` ` + `Current turn: ` + turn);
-      } else if (getCurrPlayer() === human) {
+        console.log(`Minimax has decided. It is now turn: ` + turn);
+      } else {
         gameField.field[val] = human;
         turn++;
-        console.log(`Human has decided.` + ` ` + `Current turn: ` + turn);
+        console.log(`Human has decided. It is now turn: ` + turn);
       }
     };
 
@@ -71,27 +72,29 @@
       }
     };
 
+    // Control the AI player
     const minimaxLogic = (newField, player) => {
-      const availSpots = gameField.getEmptyFieldIndexes();
+      // Only look at available squares to reduce time complexity
+      const availIndex = gameField.getEmptyFieldIndexes();
 
       if (checkWinStates(human)) {
         return { score: -10 };
       } else if (checkWinStates(minimax)) {
         return { score: 10 };
-      } else if (availSpots.length === 0) {
+      } else if (availIndex.length === 0) {
         return { score: 0 };
       }
 
       const moves = [];
 
-      for (let i = 0; i < availSpots.length; i++) {
+      for (let i = 0; i < availIndex.length; i++) {
         const move = {};
-        move.index = newField[availSpots[i]];
+        move.index = newField[availIndex[i]];
 
         if (player === human) {
-          newField[availSpots[i]] = human;
-        } else if (player === minimax) {
-          newField[availSpots[i]] = minimax;
+          newField[availIndex[i]] = human;
+        } else {
+          newField[availIndex[i]] = minimax;
         }
         if (player === minimax) {
           const result = minimaxLogic(newField, human);
@@ -101,12 +104,13 @@
           move.score = result.score;
         }
 
-        newField[availSpots[i]] = move.index;
+        newField[availIndex[i]] = move.index;
         moves.push(move);
       }
 
       let bestMove;
 
+      // Count up from -10000 or count down from 10000, depending on the current player
       if (player === minimax) {
         let bestScore = -10000;
         for (let i = 0; i < moves.length; i++) {
@@ -143,9 +147,7 @@
       ) {
         gameOver = true;
         return true;
-      } else {
-        return false;
-      }
+      } 
     };
 
     return {
@@ -159,7 +161,7 @@
     };
   })();
 
-  // The `displayController` module displays the game board and handles user input.
+  // Display the game board and handle user input
   const displayController = (() => {
     const _square = document.querySelectorAll('.square');
     const result = document.querySelector('#result');
@@ -195,10 +197,10 @@
     const updateDisplay = () => {
       for (let i = 0; i < _square.length; i++) {
         if (
-          gameField.getField(i) === human ||
-          gameField.getField(i) === minimax
+          gameField.getFieldIndex(i) === human ||
+          gameField.getFieldIndex(i) === minimax
         ) {
-          _square[i].textContent = gameField.getField(i);
+          _square[i].textContent = gameField.getFieldIndex(i);
         } else {
           _square[i].textContent = '';
         }
@@ -220,5 +222,7 @@
     return { updateResult, updateDisplay };
   })();
 
+  // Initialize the display on screen
   displayController.updateResult();
+  console.log(`Waiting for human. It is now turn: ` + gameController.turn)
 })();
