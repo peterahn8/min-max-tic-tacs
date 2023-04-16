@@ -33,9 +33,9 @@ An expected loss is worth -10 points. An expected win is worth +10 points. An ex
 
 When implemented correctly, it's impossible to win against Minimax. It will try to nullify every single one of your moves. If you leave an opening, it won't hesitate to win against you.
 
-Don't worry. We humans tend to use a similar strategy! First, we focus on preventing immediate losses. If the opponent leaves an opening, we try to win. If all else fails, we can try to force a draw. We can prevent Minimax from *winning*. That way, neither of you get to enjoy the game.
+Don't worry. We humans tend to use a similar strategy! First, we focus on preventing immediate losses. If the opponent leaves an opening, we try to win. If all else fails, we can try to force a draw. We, too, can prevent Minimax from winning.
 
-With that said, good luck! :skull:
+The optimal result is that neither of you get to have fun. Good luck! :ok_hand:
 
 ### References
 
