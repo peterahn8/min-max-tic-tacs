@@ -147,7 +147,7 @@
       ) {
         gameOver = true;
         return true;
-      } 
+      }
     };
 
     return {
@@ -224,5 +224,5 @@
 
   // Initialize the display on screen
   displayController.updateResult();
-  console.log(`Waiting for human. It is now turn: ` + gameController.turn)
+  console.log(`Waiting for human. It is now turn: ` + gameController.turn);
 })();
