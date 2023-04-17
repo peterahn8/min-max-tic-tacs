@@ -40,7 +40,7 @@ We, too, can prevent Minimax from winning. That way, neither of you get to have 
 
 What are advantages of the module pattern? Modules provide code encapsulation and prevent global namespace pollution.
 
-In other words, modules can prevent spaghetti code! They allow me to organize my code by keeping the font-end isolated from the back-end. This makes the code easier to read and maintain. I can still return functions and variables between modules as needed.
+In other words, modules can prevent spaghetti code! They allow me to organize my code by keeping the front-end isolated from the back-end. This makes the code easier to read and maintain. I can still return functions and variables between modules as needed.
 
 Modules can also provide security through obscurity. It would be somewhat difficult to modify the game logic from the console. To be fair, my game isn't a high value target for attackers, but dynamic web apps certainly are. It's best to incorporate security as early as possible in the [Software Development Life Cycle](https://en.wikipedia.org/wiki/Systems_development_life_cycle), even if it's just an extra layer of abstraction.
 
