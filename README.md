@@ -22,7 +22,7 @@ Theoretically, it can simulate 362,880 outcomes. This is made possible by recurs
 
 The game tree can be visualized like this:
 
-![Game tree from GeeksforGeeks.com](https://media.geeksforgeeks.org/wp-content/uploads/TIC_TAC.jpg)
+![Game tree from neverstopbuilding.com](https://images.squarespace-cdn.com/content/v1/5a0c6978bff2001ef7581170/1513544600041-LK94ONS0M8TSFUFCPPNB/full-minimax-move-tree.png?format=1500w)
 > Image from GeeksforGeeks.com
 
 An expected loss is worth -10 points. An expected win is worth +10 points. An expected draw is worth 0 points. These are known as "terminal states". Terminal states are essentially the AI's plan to steal your dopamine.
