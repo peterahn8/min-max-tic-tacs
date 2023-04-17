@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tic Tac Toe</title>
+    <title>min-max-tic-tacs</title>
     <link rel="stylesheet" href="styles.css" />
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -13,18 +13,24 @@
     <script src="script.js" defer></script>
   </head>
   <body>
-    <div id="display">
-      <button id="0" class="square"></button>
-      <button id="1" class="square"></button>
-      <button id="2" class="square"></button>
-      <button id="3" class="square"></button>
-      <button id="4" class="square"></button>
-      <button id="5" class="square"></button>
-      <button id="6" class="square"></button>
-      <button id="7" class="square"></button>
-      <button id="8" class="square"></button>
+    <div id="header">
+      "min-max-tic-tacs" by
+      <a id="gitHubLink" id href="https://github.com/peterahn8/min-max-tic-tacs"
+        >peterahn8 <img id="gitHubIcon" src="img/github-mark.svg" alt="GitHub icon"
+      /></a>
     </div>
     <div id="result"></div>
-    <button id="reset">Reset</button>
+    <div id="display">
+      <button id="0" class="square prevent-select"></button>
+      <button id="1" class="square prevent-select"></button>
+      <button id="2" class="square prevent-select"></button>
+      <button id="3" class="square prevent-select"></button>
+      <button id="4" class="square prevent-select"></button>
+      <button id="5" class="square prevent-select"></button>
+      <button id="6" class="square prevent-select"></button>
+      <button id="7" class="square prevent-select"></button>
+      <button id="8" class="square prevent-select"></button>
+    </div>
+    <button id="reset">Try again</button>
   </body>
 </html>
