@@ -4,22 +4,32 @@
 
 :sparkles: Playing this game will activate close-to-zero dopamine receptors. :sparkles:
 
+## Module pattern
+
+My game contains three primary modules: `gameField`, `gameController`, and `displayController`.
+
+What are advantages of the module pattern? Modules provide code encapsulation and prevent global namespace pollution.
+
+In other words, modules can prevent spaghetti code! They allow me to organize my code by keeping the front-end isolated from the back-end. This makes the code easier to read and maintain. I can still return functions and variables between modules as needed.
+
+Modules can also provide security through obscurity. It would be somewhat difficult to modify the game logic from the console. To be fair, my game isn't a high value target for attackers, but dynamic web apps certainly are. It's best to incorporate security as early as possible in the [Software Development Life Cycle](https://en.wikipedia.org/wiki/Systems_development_life_cycle), even if it's just an extra layer of abstraction.
+
 ## What is the Minimax algorithm?
 
-My game contains three primary modules: `gameField`, `gameController`, and `displayController`. Most importantly, `gameController` contains a sub-module, called `minimaxLogic`.
-
-`minimaxLogic` implements the famous [Minimax algorithm from zero-sum game theory](https://en.wikipedia.org/wiki/Minimax).
+`gameController` contains a sub-module `minimaxLogic`, which implements the famous [Minimax algorithm from zero-sum game theory](https://en.wikipedia.org/wiki/Minimax).
 
 Theoretically, Minimax can simulate all 362,880 game states of Tic-Tac-Toe. This is made possible by recursion! By the time you've made your second move, Minimax will have calculated all possible outcomes of the current game.
 
 ![Image of Garry Kasparov versus Deep Blue, 1997](https://i.insider.com/55947fbf2acae7b7188b5388?width=1000&format=jpeg&auto=webp)
 <sub>Credit: BusinessInsider.com</sub>
 
-In 1997, an IBM supercomputer (named "Deep Blue") defeated GM Garry Kasparov in Chess. Deep Blue's secret weapon? You guessed it.
+In 1997, GM Garry Kasparov was defeated by IBM's supercomputer, named "Deep Blue".
 
-Minimax.
+Deep Blue's secret weapon? You guessed it:
 
-## Game tree
+*Minimax!*
+
+## Strategy
 
 In Tic-Tac-Toe, the game tree can be visualized like this:
 
@@ -32,17 +42,7 @@ For the efficiency police, time complexity is O(b<sup>m</sup>), but this impleme
 
 When implemented correctly, it's impossible to win against Minimax. It will nullify every single one of your moves. If you leave an opening, it won't hesitate to win against you.
 
-Don't worry. We can use a similar strategy! First, focus on preventing immediate losses. If the opponent leaves an opening, try to win. When all else fails, we can force a draw...
-
-We, too, can prevent Minimax from winning. That way, neither of you get to have fun. :trollface:
-
-## Module pattern
-
-What are advantages of the module pattern? Modules provide code encapsulation and prevent global namespace pollution.
-
-In other words, modules can prevent spaghetti code! They allow me to organize my code by keeping the front-end isolated from the back-end. This makes the code easier to read and maintain. I can still return functions and variables between modules as needed.
-
-Modules can also provide security through obscurity. It would be somewhat difficult to modify the game logic from the console. To be fair, my game isn't a high value target for attackers, but dynamic web apps certainly are. It's best to incorporate security as early as possible in the [Software Development Life Cycle](https://en.wikipedia.org/wiki/Systems_development_life_cycle), even if it's just an extra layer of abstraction.
+Dont, worry. We, too, can prevent Minimax from winning. That way, neither of you get to have fun. :trollface:
 
 ### References
 
