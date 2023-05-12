@@ -2,7 +2,7 @@
   const human = 'X';
   const minimax = 'O';
 
-  // Manage the game board
+  // Manage the game board and helper functions
   const gameField = (() => {
     const field = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
@@ -41,6 +41,7 @@
         return false;
       }
 
+      // Iterate turn counter and call `minimaxLogic`
       if (getCurrPlayer() === minimax) {
         turn++;
         const index = minimaxLogic(gameField.field, minimax).index;
@@ -142,10 +143,11 @@
         }
       }
 
-      // Return the best scoring move
+      // Return the best scoring move in `moves`
       return moves[bestMove];
     };
 
+    // Check win condition of `player`
     const checkWin = (player) => {
       const field = gameField.field;
 
@@ -254,6 +256,11 @@
         `You're putting up a good fight, but I'm programmed to win. Sorry!`,
         `Looks like I've got the upper hand. Don't worry, practice makes perfect!`,
         `I'm seeing some patterns in your moves. Don't worry, I won't tell anyone ;)`,
+        `The board may be small, but the competition is fierce. Try again for the win!`,
+        `Hey, it's not whether you win or lose, it's how you play the game... but winning is still more fun.`,
+        `Tough break, champ. Looks like the board had other plans for you.`,
+        `Sorry, you were so close to winning that I thought you had it in the bag. Better luck next time`,
+        `Don't feel bad about losing. I've been playing Tic Tac Toe since I was a baby AI!`
       ];
 
       const tieArray = [
@@ -266,6 +273,12 @@
         `Well, a tie isn't a loss, but it's not a win either. Let's try again and see who comes out on top.`,
         `Well played, my friend. I think we've both earned the right to call ourselves average Tic-Tac-Toe players.`,
         `A tie? That's almost as frustrating as a loss. I guess we'll just have to keep playing until someone wins.`,
+        `Wow, what a nail-biter! Looks like we're both equally matched.`,
+        `A tie? I guess that means we'll just have to play again and settle this once and for all!`,
+        `Looks like neither of us wanted to give the other the satisfaction of winning. Good game!`,
+        `Well, well, well, it looks like we've got ourselves a stalemate. Better luck next time!`,
+        `We might not have a winner this time, but we certainly have a lot of skill on display!`,
+        `No one wins, but no one loses either. It's like we're both winners in a way!`
       ];
 
       if (gameController.checkWin(minimax)) {
